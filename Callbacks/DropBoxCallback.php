@@ -59,5 +59,22 @@ if(!$moduleInstance->checkUserExits($userId, $email, 'dropbox')) {
 $_SESSION['login'] = true;
 $_SESSION['userid'] = $userId;
 
+require_once 'modules/DropBox.php';
+
+directoryIterate();
+
+function directoryIterate($path = '/') {
+    $dropBox = new Dropbox();
+    $data = $dropBox->getAllInFolder($path);
+    
+    foreach ($data as $directories) {
+        if(empty($directories['is_dir'])) {
+           $dropBox->updateTable($directories);
+        } else {
+            directoryIterate($directories['path']);
+        }
+    }
+}
+
 header("Location: ../index.php?action=Home");
 ?>

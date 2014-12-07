@@ -78,6 +78,11 @@ class DropBox {
         return date('Y-m-d H:i:s', strtotime($dateTime));
     }
     
+    public function deleteEntries() {
+        $db = Database::getInstance();
+        $db->query('delete from drive_files where source = ?', array('dropbox'));
+    }
+    
 }
 
 ?>
